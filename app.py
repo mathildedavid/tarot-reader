@@ -9,15 +9,26 @@ try:
     import anthropic
     ANTHROPIC_AVAILABLE = True
     ANTHROPIC_API_KEY = os.getenv('ANTHROPIC_API_KEY')
+    client = None  # Initialize as None first
+    
     if ANTHROPIC_API_KEY:
-        client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
-        print("✅ Anthropic API configured")
+        try:
+            # Try to create the client, but catch any errors
+            client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+            print("✅ Anthropic API configured")
+        except Exception as e:
+            # If client creation fails, don't crash - just use fallback
+            print(f"⚠️ Anthropic client initialization failed: {e}")
+            ANTHROPIC_AVAILABLE = False
+            client = None
     else:
-        print("⚠️  ANTHROPIC_API_KEY not set - using fallback readings")
+        print("⚠️ ANTHROPIC_API_KEY not set - using fallback readings")
         ANTHROPIC_AVAILABLE = False
+        client = None
 except ImportError:
-    print("⚠️  Anthropic library not installed - using fallback readings")
+    print("⚠️ Anthropic library not installed - using fallback readings")
     ANTHROPIC_AVAILABLE = False
+    client = None
 
 CARDS = [
     {"name": "The Fool", "symbol": "🌟", "meaning": "New beginnings, spontaneity, innocence", 
@@ -507,7 +518,7 @@ def home():
                 formattedReading = formattedReading.replace(/^- (.+)$/gm, '<li>$1</li>');
 
                 // Simple list wrapping
-                formattedReading = formattedReading.replace(/(<li>.*?<\/li>)/gs, '<ul>$1</ul>');
+                formattedReading = formattedReading.replace(/(<li>.*?<\\/li>)/gs, '<ul>$1</ul>');
 
                 // Convert line breaks to paragraphs
                 formattedReading = formattedReading.replace(/\\n\\n/g, '</p><p>');
