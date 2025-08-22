@@ -217,9 +217,131 @@ def home():
             max-width: 700px; 
             margin: 40px auto; 
             padding: 20px; 
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: #0a0f1c;
             min-height: 100vh;
             line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }}
+        
+        .background-animation {{
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, #0a0f1c 0%, #1a1a2e 25%, #16213e 50%, #0f3460 100%);
+        }}
+        
+        .particle {{
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }}
+        
+        .particle:nth-child(1) {{
+            width: 6px;
+            height: 6px;
+            background: rgba(107, 115, 255, 0.6);
+            animation: float1 20s infinite linear;
+        }}
+        
+        .particle:nth-child(2) {{
+            width: 4px;
+            height: 4px;
+            background: rgba(147, 51, 234, 0.8);
+            animation: float2 25s infinite linear;
+        }}
+        
+        .particle:nth-child(3) {{
+            width: 8px;
+            height: 8px;
+            background: rgba(59, 130, 246, 0.4);
+            animation: float3 30s infinite linear;
+        }}
+        
+        .particle:nth-child(4) {{
+            width: 3px;
+            height: 3px;
+            background: rgba(168, 85, 247, 0.7);
+            animation: float4 18s infinite linear;
+        }}
+        
+        .particle:nth-child(5) {{
+            width: 5px;
+            height: 5px;
+            background: rgba(99, 102, 241, 0.5);
+            animation: float5 22s infinite linear;
+        }}
+        
+        .particle:nth-child(6) {{
+            width: 7px;
+            height: 7px;
+            background: rgba(139, 92, 246, 0.6);
+            animation: float6 28s infinite linear;
+        }}
+        
+        @keyframes float1 {{
+            0% {{ transform: translateY(100vh) translateX(-10px) rotate(0deg); opacity: 0; }}
+            10% {{ opacity: 1; }}
+            90% {{ opacity: 1; }}
+            100% {{ transform: translateY(-10vh) translateX(10px) rotate(360deg); opacity: 0; }}
+        }}
+        
+        @keyframes float2 {{
+            0% {{ transform: translateY(100vh) translateX(10px) rotate(0deg); opacity: 0; }}
+            15% {{ opacity: 1; }}
+            85% {{ opacity: 1; }}
+            100% {{ transform: translateY(-10vh) translateX(-15px) rotate(-360deg); opacity: 0; }}
+        }}
+        
+        @keyframes float3 {{
+            0% {{ transform: translateY(100vh) translateX(-15px) rotate(0deg); opacity: 0; }}
+            12% {{ opacity: 1; }}
+            88% {{ opacity: 1; }}
+            100% {{ transform: translateY(-10vh) translateX(20px) rotate(360deg); opacity: 0; }}
+        }}
+        
+        @keyframes float4 {{
+            0% {{ transform: translateY(100vh) translateX(20px) rotate(0deg); opacity: 0; }}
+            20% {{ opacity: 1; }}
+            80% {{ opacity: 1; }}
+            100% {{ transform: translateY(-10vh) translateX(-10px) rotate(-360deg); opacity: 0; }}
+        }}
+        
+        @keyframes float5 {{
+            0% {{ transform: translateY(100vh) translateX(-5px) rotate(0deg); opacity: 0; }}
+            8% {{ opacity: 1; }}
+            92% {{ opacity: 1; }}
+            100% {{ transform: translateY(-10vh) translateX(15px) rotate(360deg); opacity: 0; }}
+        }}
+        
+        @keyframes float6 {{
+            0% {{ transform: translateY(100vh) translateX(15px) rotate(0deg); opacity: 0; }}
+            18% {{ opacity: 1; }}
+            82% {{ opacity: 1; }}
+            100% {{ transform: translateY(-10vh) translateX(-20px) rotate(-360deg); opacity: 0; }}
+        }}
+        
+        .stars {{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }}
+        
+        .star {{
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }}
+        
+        @keyframes twinkle {{
+            0%, 100% {{ opacity: 0.3; transform: scale(1); }}
+            50% {{ opacity: 1; transform: scale(1.2); }}
         }}
         .container {{ 
             background: white; 
@@ -415,6 +537,16 @@ def home():
     </style>
 </head>
 <body>
+    <div class="background-animation">
+        <div class="stars"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+    
     <div class="container">
         <div class="status">{api_status}</div>
         <h1>🔮 Tarot Card Reader</h1>
@@ -561,6 +693,35 @@ def home():
                 drawCard();
             }}
         }});
+        
+        // Create dynamic background stars
+        function createStars() {{
+            const starsContainer = document.querySelector('.stars');
+            const numberOfStars = 50;
+            
+            for (let i = 0; i < numberOfStars; i++) {{
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                starsContainer.appendChild(star);
+            }}
+        }}
+        
+        // Position particles randomly
+        function initializeParticles() {{
+            const particles = document.querySelectorAll('.particle');
+            particles.forEach((particle, index) => {{
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+            }});
+        }}
+        
+        // Initialize background animation
+        createStars();
+        initializeParticles();
     </script>
 </body>
 </html>
